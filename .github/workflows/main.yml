@@ -1,6 +1,6 @@
-name: Actions
+name: Build and deploy project
 
-on: [push, pull_request]
+on: workflow_dispatch
 
 jobs:
   build:
@@ -26,8 +26,6 @@ jobs:
         uses: game-ci/unity-test-runner@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Build
       - name: Build project
