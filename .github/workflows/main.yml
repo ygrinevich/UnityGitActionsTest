@@ -7,18 +7,14 @@ env:
 
 jobs:
 
-  buildAndTestForSomePlatforms:
-    name: Build for ${{ matrix.targetPlatform }}
+  testInMode:
+    name: Test in ${{ matrix.testMode }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         projectPath:
           - Project
-        targetPlatform:
-          - StandaloneWindows64
-          - iOS
-          - Android
         testMode:
           - EditMode
           - PlayMode
@@ -46,7 +42,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-buildAndTest-${{ matrix.projectPath }}-buildAndTest-${{ matrix.targetPlatform }}
+          key: Library-${{ matrix.projectPath }}-buildAndTest-${{ matrix.targetPlatform }}
           restore-keys: |
             Library-${{ matrix.projectPath }}-buildAndTest-
             Library-${{ matrix.projectPath }}-
@@ -67,6 +63,48 @@ jobs:
         with:
           name: Test results for ${{ matrix.testMode }}
           path: ${{ steps.testRunner.outputs.artifactsPath }}
+
+  buildForTargetPlatform:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    needs: testInMode
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Project
+        targetPlatform:
+          - StandaloneWindows64
+          - iOS
+          - Android
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Create LFS File List
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS Cache
+        uses: actions/cache@v2
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+
+      - name: Restore Library Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-buildAndTest-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-buildAndTest-
+            Library-${{ matrix.projectPath }}-
 
       # Build for configured platforms
       - name: Build Unity Project
