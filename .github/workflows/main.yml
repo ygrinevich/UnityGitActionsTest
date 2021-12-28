@@ -1,42 +1,85 @@
-name: Build and deploy project
+name: Build project
 
 on: workflow_dispatch
 
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
 jobs:
-  build:
-    name: Build my project
+
+  buildAndTestForSomePlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - Project
+        targetPlatform:
+          - StandaloneWindows64
+          - iOS
+          - Android
+        testMode:
+          - EditMode
+          - PlayMode
     steps:
-      # Checkout
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v2
-        with:
-          lfs: true
 
-      # Cache
-      - uses: actions/cache@v2
+      - name: Create LFS File List
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS Cache
+        uses: actions/cache@v2
+        id: lfs-cache
         with:
-          path: Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+
+      - name: Restore Library Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-buildAndTest-${{ matrix.projectPath }}-buildAndTest-${{ matrix.targetPlatform }}
           restore-keys: |
-            Library-
+            Library-${{ matrix.projectPath }}-buildAndTest-
+            Library-${{ matrix.projectPath }}-
 
-      # Test
-      - name: Run tests
+      # Run tests
+      - name: Run Tests
         uses: game-ci/unity-test-runner@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        id: testRunner
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          testMode: ${{ matrix.testMode }}
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          checkName: ${{ matrix.testMode }} test results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      # Build
-      - name: Build project
+      # Upload test artifacts
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test results for ${{ matrix.testMode }}
+          path: ${{ steps.testRunner.outputs.artifactsPath }}
+
+      # Build for configured platforms
+      - name: Build Unity Project
         uses: game-ci/unity-builder@v2
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
-          targetPlatform: WebGL
+          projectPath: ${{ matrix.projectPath }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          customParameters: "-myParameter myValue -myBoolean -ThirdParameter andItsValue"
 
-      # Output
-      - uses: actions/upload-artifact@v2
+      # Upload build artifacts
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: Build (${{ matrix.targetPlatform }})
+          path: build/${{ matrix.targetPlatform }}
