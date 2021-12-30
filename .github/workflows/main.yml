@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**, {0}/Packages/**, {0}/ProjectSettings/**', matrix.projectPath)) }}
+          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', matrix.projectPath), format('{0}/Packages/**', matrix.projectPath), format('{0}/ProjectSettings/**', matrix.projectPath)) }}
 
       # Run tests
       - name: Run Tests
@@ -104,7 +104,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**, {0}/Packages/**, {0}/ProjectSettings/**', matrix.projectPath)) }}
+          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', matrix.projectPath), format('{0}/Packages/**', matrix.projectPath), format('{0}/ProjectSettings/**', matrix.projectPath)) }}
 
       # Build for configured platforms
       - name: Build Unity Project
