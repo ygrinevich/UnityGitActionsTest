@@ -1,3 +1,6 @@
+# Visual Studio cache directory
+.vs/
+
 # Artifacts folder for GitHub Actions
 
 /artifacts/
