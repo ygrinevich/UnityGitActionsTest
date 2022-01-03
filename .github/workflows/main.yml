@@ -11,13 +11,17 @@ on:
           - StandaloneWindows64
           - iOS
           - Android
-      projectPath:
+      appId:
+        type: choice
         required: true
-        description: Project path
-        default: Project
+        description: Application Id
+        options:
+          - com.heyworks.fastlanetest
+          - com.heyworks.fastlanestage
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  PROJECT_PATH: Project
 
 jobs:
 
@@ -27,8 +31,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        projectPath:
-          - Project
         testMode:
           - EditMode
           - PlayMode
@@ -55,15 +57,15 @@ jobs:
       - name: Restore Library Cache
         uses: actions/cache@v2
         with:
-          path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', matrix.projectPath), format('{0}/Packages/**', matrix.projectPath), format('{0}/ProjectSettings/**', matrix.projectPath)) }}
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', env.PROJECT_PATH), format('{0}/Packages/**', env.PROJECT_PATH), format('{0}/ProjectSettings/**', env.PROJECT_PATH)) }}
 
       # Run tests
       - name: Run Tests
         uses: game-ci/unity-test-runner@v2
         id: testRunner
         with:
-          projectPath: ${{ matrix.projectPath }}
+          projectPath: ${{ env.PROJECT_PATH }}
           testMode: ${{ matrix.testMode }}
           checkName: ${{ matrix.testMode }} test results
           githubToken: ${{ secrets.GITHUB_TOKEN }}
@@ -79,11 +81,6 @@ jobs:
     name: Build for ${{ github.event.inputs.targetPlatform }}
     runs-on: ubuntu-latest
     needs: testInMode
-    strategy:
-      fail-fast: false
-      matrix:
-        projectPath:
-          - Project
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -107,14 +104,14 @@ jobs:
       - name: Restore Library Cache
         uses: actions/cache@v2
         with:
-          path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', matrix.projectPath), format('{0}/Packages/**', matrix.projectPath), format('{0}/ProjectSettings/**', matrix.projectPath)) }}
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', env.PROJECT_PATH), format('{0}/Packages/**', env.PROJECT_PATH), format('{0}/ProjectSettings/**', env.PROJECT_PATH)) }}
 
       # Build for configured platforms
       - name: Build Unity Project
         uses: game-ci/unity-builder@v2
         with:
-          projectPath: ${{ matrix.projectPath }}
+          projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ github.event.inputs.targetPlatform }}
           customParameters: "-myParameter myValue -myBoolean -ThirdParameter andItsValue"
 
@@ -129,6 +126,7 @@ jobs:
     name: Release to the App Store
     runs-on: macos-10.15
     needs: buildForTargetPlatform
+    if: github.event.inputs.targetPlatform == 'iOS'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -148,9 +146,8 @@ jobs:
           APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
           APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
           APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
-          IOS_APP_ID: com.heyworks.fastlanetest
+          IOS_APP_ID: ${{ github.event.inputs.appId }}
           IOS_BUILD_PATH: ${{ format('{0}/build/iOS', github.workspace) }}
-          PROJECT_NAME: Fastlane Test
         run: |
           find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
           bundle install
