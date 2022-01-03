@@ -11,6 +11,10 @@ on:
           - StandaloneWindows64
           - iOS
           - Android
+      projectPath:
+        required: true
+        description: Project path
+        default: Project
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
