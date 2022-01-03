@@ -113,7 +113,7 @@ jobs:
         with:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ github.event.inputs.targetPlatform }}
-          versioning: Custom
+          versioning: None
           customParameters: "-myParameter myValue -myBoolean -ThirdParameter andItsValue"
 
       # Upload build artifacts
