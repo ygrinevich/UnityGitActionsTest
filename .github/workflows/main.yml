@@ -152,7 +152,6 @@ jobs:
           APPSTORE_P8: ${{ secrets.APPSTORE_P8 }}
           IOS_APP_ID: ${{ github.event.inputs.appId }}
           IOS_BUILD_PATH: ${{ format('{0}/build/iOS', github.workspace) }}
-          IOS_APP_VERSION: ${{ needs.buildForTargetPlatform.outputs.buildVersion }}
         run: |
           find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
           bundle install
