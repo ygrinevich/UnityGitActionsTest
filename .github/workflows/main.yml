@@ -117,6 +117,7 @@ jobs:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ github.event.inputs.targetPlatform }}
           versioning: None
+          buildMethod: UnityBuilderAction.BuildScript.Build
           customParameters: "-myParameter myValue -myBoolean -ThirdParameter andItsValue"
 
       # Upload build artifacts
