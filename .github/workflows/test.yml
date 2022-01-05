@@ -63,6 +63,7 @@ jobs:
         uses: kuler90/setup-unity@v1
         with:
           project-path: ${{ env.PROJECT_PATH }}
+          unity-modules: windows-mono
 
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
@@ -74,6 +75,7 @@ jobs:
       - name: Build Unity
         uses: kuler90/build-unity@v1
         with:
+          project-path: ${{ env.PROJECT_PATH }}
           build-path: build/${{ github.event.inputs.targetPlatform }}
           build-target: ${{ github.event.inputs.targetPlatform }}
 
