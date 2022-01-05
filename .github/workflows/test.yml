@@ -62,6 +62,7 @@ jobs:
       - name: Setup Unity IL2CPP
         uses: kuler90/setup-unity@v1
         with:
+          project-path: ${{ env.PROJECT_PATH }}
           unity-modules: windows-il2cpp
 
       - name: Activate Unity
