@@ -59,11 +59,10 @@ jobs:
             Library-${{ github.event.inputs.targetPlatform }}-
 
       # Build for configured platforms
-      - name: Setup Unity IL2CPP
+      - name: Setup Unity
         uses: kuler90/setup-unity@v1
         with:
           project-path: ${{ env.PROJECT_PATH }}
-          unity-modules: windows-il2cpp
 
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
