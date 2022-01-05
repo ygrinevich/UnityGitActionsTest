@@ -1,0 +1,85 @@
+name: Build project
+
+on:
+  workflow_dispatch:
+    inputs:
+      targetPlatform:
+        type: choice
+        required: true
+        description: Target platform for build
+        options:
+          - StandaloneWindows64
+          - iOS
+          - Android
+      appBundleId:
+        type: choice
+        required: true
+        description: Application Bundle Id
+        options:
+          - com.heyworks.fastlanetest
+          - com.heyworks.fastlanestage
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  PROJECT_PATH: Project
+
+jobs:
+
+  buildForTargetPlatform:
+    name: Build for ${{ github.event.inputs.targetPlatform }}
+    runs-on: ubuntu-latest
+    needs: testInMode
+    outputs:
+      buildVersion: ${{ steps.buildUnityProject.outputs.buildVersion }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Create LFS File List
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS Cache
+        uses: actions/cache@v2
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+
+      - name: Restore Library Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.PROJECT_PATH }}/Library
+          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', env.PROJECT_PATH), format('{0}/Packages/**', env.PROJECT_PATH), format('{0}/ProjectSettings/**', env.PROJECT_PATH)) }}
+          restore-keys: |
+            Library-${{ github.event.inputs.targetPlatform }}-
+
+      # Build for configured platforms
+      - name: Setup Unity IL2CPP
+        uses: kuler90/setup-unity@v1
+        with:
+          unity-modules: windows-il2cpp
+
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
+        with:
+          unity-username: ${{ secrets.UNITY_ID_EMAIL }}
+          unity-password: ${{ secrets.UNITY_ID_PASSWORD }}
+
+      - name: Build Unity
+        uses: kuler90/build-unity@v1
+        with:
+          build-path: build/${{ github.event.inputs.targetPlatform }}
+          build-target: ${{ github.event.inputs.targetPlatform }}
+
+      # Upload build artifacts
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-${{ github.event.inputs.targetPlatform }}
+          path: build/${{ github.event.inputs.targetPlatform }}

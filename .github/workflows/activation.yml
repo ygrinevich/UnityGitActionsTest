@@ -16,3 +16,5 @@ jobs:
         with:
           name: ${{ steps.getManualLicenseFile.outputs.filePath }}
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+
+      # Visit https://license.unity3d.com/manual and upload artifact. You should now receive your license file (Unity_v20XX.x.ulf) as a download.
