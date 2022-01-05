@@ -65,10 +65,11 @@ jobs:
           project-path: ${{ env.PROJECT_PATH }}
 
       - name: Activate Unity
-        uses: js6pak/activate-unity@master
+        uses: kuler90/activate-unity@v1
         with:
           unity-username: ${{ secrets.UNITY_ID_EMAIL }}
           unity-password: ${{ secrets.UNITY_ID_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_ID_AUTHENTICATOR_KEY }}
 
       - name: Build Unity
         uses: kuler90/build-unity@v1
