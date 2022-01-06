@@ -29,7 +29,7 @@ jobs:
     name: Build for ${{ github.event.inputs.targetPlatform }}
     runs-on: ubuntu-latest
     outputs:
-      buildVersion: ${{ steps.buildUnityProject.outputs.buildVersion }}
+      build-path: ${{ steps.buildUnityProject.outputs.build-path }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -73,6 +73,7 @@ jobs:
           unity-authenticator-key: ${{ secrets.UNITY_ID_AUTHENTICATOR_KEY }}
 
       - name: Build Unity
+        id: buildUnityProject
         uses: kuler90/build-unity@v1
         with:
           project-path: ${{ env.PROJECT_PATH }}
@@ -84,4 +85,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ github.event.inputs.targetPlatform }}
-          path: ./builds/${{ github.event.inputs.targetPlatform }}
+          path: ${{ steps.buildUnityProject.outputs.build-path }}
