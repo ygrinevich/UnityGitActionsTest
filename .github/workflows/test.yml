@@ -27,7 +27,7 @@ jobs:
 
   buildForTargetPlatform:
     name: Build for ${{ github.event.inputs.targetPlatform }}
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       build-path: ${{ steps.buildUnityProject.outputs.build-path }}
     steps:
