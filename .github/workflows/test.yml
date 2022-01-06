@@ -63,7 +63,7 @@ jobs:
         uses: kuler90/setup-unity@v1
         with:
           project-path: ${{ env.PROJECT_PATH }}
-          unity-modules: windows-mono
+          unity-modules: windows
 
       - name: Activate Unity
         uses: js6pak/activate-unity@master
