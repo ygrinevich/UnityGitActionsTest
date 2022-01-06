@@ -27,7 +27,7 @@ jobs:
 
   buildForTargetPlatform:
     name: Build for ${{ github.event.inputs.targetPlatform }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     outputs:
       build-path: ${{ steps.buildUnityProject.outputs.build-path }}
     steps:
@@ -63,7 +63,7 @@ jobs:
         uses: kuler90/setup-unity@v1
         with:
           project-path: ${{ env.PROJECT_PATH }}
-          unity-modules: windows
+          unity-modules: windows-il2cpp
 
       - name: Activate Unity
         uses: js6pak/activate-unity@master
