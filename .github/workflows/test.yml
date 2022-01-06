@@ -77,7 +77,7 @@ jobs:
         uses: kuler90/build-unity@v1
         with:
           project-path: ${{ env.PROJECT_PATH }}
-          build-path: ./builds/${{ github.event.inputs.targetPlatform }}
+          build-path: ~/builds/${{ github.event.inputs.targetPlatform }}
           build-target: ${{ github.event.inputs.targetPlatform }}
 
       # Upload build artifacts
