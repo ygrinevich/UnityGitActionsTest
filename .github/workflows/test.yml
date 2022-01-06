@@ -66,7 +66,7 @@ jobs:
           unity-modules: windows-mono
 
       - name: Activate Unity
-        uses: kuler90/activate-unity@v1
+        uses: js6pak/activate-unity@master
         with:
           unity-username: ${{ secrets.UNITY_ID_EMAIL }}
           unity-password: ${{ secrets.UNITY_ID_PASSWORD }}
