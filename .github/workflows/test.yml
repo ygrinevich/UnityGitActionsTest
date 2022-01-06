@@ -71,6 +71,9 @@ jobs:
           unity-username: ${{ secrets.UNITY_ID_EMAIL }}
           unity-password: ${{ secrets.UNITY_ID_PASSWORD }}
           unity-authenticator-key: ${{ secrets.UNITY_ID_AUTHENTICATOR_KEY }}
+      
+      - name: Create build output directory
+        run: mkdir -p ${{ github.workspace }}/build/${{ github.event.inputs.targetPlatform }}
 
       - name: Build Unity
         id: buildUnityProject
