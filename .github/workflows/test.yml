@@ -85,4 +85,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ github.event.inputs.targetPlatform }}
-          path: ${{ steps.buildUnityProject.outputs.build-path }}
+          path: ${{ github.workspace }}/build/**/*
