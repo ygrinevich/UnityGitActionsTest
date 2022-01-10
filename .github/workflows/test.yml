@@ -54,9 +54,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ env.PROJECT_PATH }}/Library
-          key: Library-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', env.PROJECT_PATH), format('{0}/Packages/**', env.PROJECT_PATH), format('{0}/ProjectSettings/**', env.PROJECT_PATH)) }}
+          key: Library-build-${{ github.event.inputs.targetPlatform }}-${{ hashFiles(format('{0}/Assets/**', env.PROJECT_PATH), format('{0}/Packages/**', env.PROJECT_PATH), format('{0}/ProjectSettings/**', env.PROJECT_PATH)) }}
           restore-keys: |
-            Library-${{ github.event.inputs.targetPlatform }}-
+            Library-build-${{ github.event.inputs.targetPlatform }}-
+            Library-build-
+            Library-
 
       # Build for configured platforms
       - name: Setup Unity
