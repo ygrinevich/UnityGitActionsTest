@@ -120,7 +120,7 @@ jobs:
       # Build for configured platforms
       - name: Build Unity Project
         id: buildUnityProject
-        uses: game-ci/unity-builder@v2
+        uses: game-ci/unity-builder@main
         with:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: ${{ github.event.inputs.targetPlatform }}
