@@ -127,6 +127,14 @@ jobs:
           versioning: None
           buildMethod: UnityBuilderAction.Builder.Build
           customParameters: "-appBundleId ${{ github.event.inputs.appBundleId }}"
+          # Android settings
+          androidAppBundle: true
+          androidKeystoreName: superlevel.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+          androidTargetSdkVersion: AndroidApiLevel30
 
       # Upload build artifacts
       - name: Upload Build
