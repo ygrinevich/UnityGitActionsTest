@@ -155,7 +155,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ github.event.inputs.targetPlatform }}
-          path: ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
+          path: build/${{ github.event.inputs.targetPlatform }}
 
   releaseToAppStore:
     name: Release to the App Store
