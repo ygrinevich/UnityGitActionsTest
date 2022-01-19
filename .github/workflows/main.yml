@@ -42,17 +42,22 @@ jobs:
           path: ${{ github.event.inputs.targetPlatform }}
 
       - name: Create LFS File List
-        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+        run: |
+          cd ${{ github.event.inputs.targetPlatform }}
+          git lfs ls-files -l
+          cut -d' ' -f1
+          sort > .lfs-assets-id
 
       - name: Restore LFS Cache
         uses: actions/cache@v2
         id: lfs-cache
         with:
-          path: .git/lfs
+          path: ${{ env.PROJECT_PATH }}/.git/lfs
           key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
 
       - name: Git LFS Pull
         run: |
+          cd ${{ github.event.inputs.targetPlatform }}
           git lfs pull
           git add .
           git reset --hard
@@ -96,13 +101,17 @@ jobs:
           path: ${{ github.event.inputs.targetPlatform }}
 
       - name: Create LFS File List
-        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+        run: |
+          cd ${{ github.event.inputs.targetPlatform }}
+          git lfs ls-files -l
+          cut -d' ' -f1
+          sort > .lfs-assets-id
 
       - name: Restore LFS Cache
         uses: actions/cache@v2
         id: lfs-cache
         with:
-          path: ${{ github.event.inputs.targetPlatform }}/.git/lfs
+          path: ${{ env.PROJECT_PATH }}/.git/lfs
           key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
 
       - name: Git LFS Pull
@@ -146,7 +155,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ github.event.inputs.targetPlatform }}
-          path: build/${{ github.event.inputs.targetPlatform }}
+          path: cd ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
 
   releaseToAppStore:
     name: Release to the App Store
