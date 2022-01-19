@@ -140,6 +140,7 @@ jobs:
           targetPlatform: ${{ github.event.inputs.targetPlatform }}
           versioning: None
           buildMethod: UnityBuilderAction.Builder.Build
+          buildsPath: ${{ github.event.inputs.targetPlatform }}/build
           customParameters: "-appBundleId ${{ github.event.inputs.appBundleId }}"
           # Android settings
           androidAppBundle: true
@@ -155,7 +156,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ github.event.inputs.targetPlatform }}
-          path: build/${{ github.event.inputs.targetPlatform }}
+          path: ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
 
   releaseToAppStore:
     name: Release to the App Store
