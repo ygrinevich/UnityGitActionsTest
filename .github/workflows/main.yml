@@ -38,6 +38,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          path: ${{ github.event.inputs.targetPlatform }}
 
       - name: Create LFS File List
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
