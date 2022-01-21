@@ -1,4 +1,4 @@
-name: Callee
+name: Callee on ${{ github.ref_name }}
 
 on:
   workflow_call:
