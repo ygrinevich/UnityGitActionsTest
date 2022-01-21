@@ -1,0 +1,21 @@
+name: Caller
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseToPlayStore:
+        required: true
+        type: boolean
+        description: Release to Google Play Store
+      releaseToFirebase:
+        required: true
+        type: boolean
+        description: Release to Firebase
+        default: 'true'
+
+jobs:
+  release_to_playstore:
+    uses: ygrinevich/UnityGitActionsTest/.github/workflows/callee.yml@main
+    with:
+      releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore }}
+      releaseToFirebase: ${{ github.event.inputs.releaseToFirebase }}

@@ -143,7 +143,7 @@ jobs:
           buildsPath: ${{ github.event.inputs.targetPlatform }}/build
           customParameters: "-appBundleId ${{ github.event.inputs.appBundleId }}"
           # Android settings
-          #androidAppBundle: true
+          androidAppBundle: true
           androidKeystoreName: superlevel.keystore
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}

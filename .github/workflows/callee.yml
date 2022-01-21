@@ -1,0 +1,25 @@
+name: Callee
+
+on:
+  workflow_call:
+    inputs:
+      releaseToPlayStore:
+        required: true
+        type: boolean
+      releaseToFirebase:
+        required: true
+        type: boolean
+
+jobs:
+
+  release_to_playsrore:
+    name: Release to the Play Store / Firebase
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add Google Play Authentication
+        if: ${{ inputs.releaseToPlayStore }}
+        run: echo ${{ inputs.releaseToPlayStore }}
+
+      - name: Add Firebase Authentication
+        if: ${{ inputs.releaseToFirebase }}
+        run: echo ${{ inputs.releaseToFirebase }}
