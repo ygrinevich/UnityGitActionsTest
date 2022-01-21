@@ -1,4 +1,4 @@
-name: Caller on ${{ github.ref_name }}
+name: Caller
 
 on:
   workflow_dispatch:
