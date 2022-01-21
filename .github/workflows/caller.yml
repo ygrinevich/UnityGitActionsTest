@@ -17,5 +17,5 @@ jobs:
   release_to_playstore:
     uses: ygrinevich/UnityGitActionsTest/.github/workflows/callee.yml@main
     with:
-      releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore }}
-      releaseToFirebase: ${{ github.event.inputs.releaseToFirebase }}
+      releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore == 'true' }}
+      releaseToFirebase: ${{ github.event.inputs.releaseToFirebase == 'true' }}
