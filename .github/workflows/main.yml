@@ -150,13 +150,19 @@ jobs:
           androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
           androidTargetSdkVersion: AndroidApiLevel30
+      
+      # Zip build output
+      - name: Zip Build
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}.zip ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
 
       # Upload build artifacts
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
           name: build-${{ github.event.inputs.targetPlatform }}
-          path: ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
+          path: ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}.zip
 
   releaseToAppStore:
     name: Release to the App Store
@@ -166,11 +172,19 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+      
       - name: Download iOS Artifact
         uses: actions/download-artifact@v2
         with:
           name: build-iOS
           path: github/workspace/build/iOS
+    
+      # Unzip build output
+      - name: Unzip Build
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq github/workspace/build/iOS/iOS.zip -d github/workspace/build/iOS/iOS
+
       - name: Fix File Permissions and Run Fastlane
         env:
           APPLE_CONNECT_EMAIL: ${{ secrets.APPLE_CONNECT_EMAIL }}
@@ -188,6 +202,7 @@ jobs:
           find $IOS_BUILD_PATH -type f -name "**.sh" -exec chmod +x {} \;
           bundle install
           bundle exec fastlane ios beta
+
       - name: Cleanup to avoid storage limit
         uses: geekyeggo/delete-artifact@v1
         with:
