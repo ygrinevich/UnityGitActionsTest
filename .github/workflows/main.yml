@@ -155,7 +155,7 @@ jobs:
       - name: Zip Build
         run: |
           cd ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
-          zip -r ../${{ github.event.inputs.targetPlatform }}.zip
+          zip -r ../${{ github.event.inputs.targetPlatform }}.zip .
 
       # Upload build artifacts
       - name: Upload Build
