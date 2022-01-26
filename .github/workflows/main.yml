@@ -151,12 +151,11 @@ jobs:
           androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
           androidTargetSdkVersion: AndroidApiLevel30
 
-      - name: Install zip
-        uses: montudor/action-zip@v1
-
       # Zip build output
       - name: Zip Build
-        run: (cd ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }} && zip -r ../${{ github.event.inputs.targetPlatform }}.zip .)
+        run: |
+          cd ${{ github.event.inputs.targetPlatform }}/build/${{ github.event.inputs.targetPlatform }}
+          zip -r ../${{ github.event.inputs.targetPlatform }}.zip
 
       # Upload build artifacts
       - name: Upload Build
