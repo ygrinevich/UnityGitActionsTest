@@ -53,7 +53,7 @@ jobs:
         id: lfs-cache
         with:
           path: ${{ env.PROJECT_PATH }}/.git/lfs
-          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+          key: ${{ runner.os }}-lfs-${{ hashFiles(format('{0}/.lfs-assets-id', github.event.inputs.targetPlatform)) }}
 
       - name: Git LFS Pull
         run: |
@@ -112,7 +112,7 @@ jobs:
         id: lfs-cache
         with:
           path: ${{ env.PROJECT_PATH }}/.git/lfs
-          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+          key: ${{ runner.os }}-lfs-${{ hashFiles(format('{0}/.lfs-assets-id', github.event.inputs.targetPlatform)) }}
 
       - name: Git LFS Pull
         run: |
