@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v2
         id: lfs-cache
         with:
-          path: ${{ env.PROJECT_PATH }}/.git/lfs
+          path: ${{ github.event.inputs.targetPlatform }}/.git/lfs
           key: ${{ runner.os }}-lfs-${{ hashFiles(format('{0}/.lfs-assets-id', github.event.inputs.targetPlatform)) }}
 
       - name: Git LFS Pull
@@ -111,7 +111,7 @@ jobs:
         uses: actions/cache@v2
         id: lfs-cache
         with:
-          path: ${{ env.PROJECT_PATH }}/.git/lfs
+          path: ${{ github.event.inputs.targetPlatform }}/.git/lfs
           key: ${{ runner.os }}-lfs-${{ hashFiles(format('{0}/.lfs-assets-id', github.event.inputs.targetPlatform)) }}
 
       - name: Git LFS Pull
