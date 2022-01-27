@@ -141,7 +141,7 @@ jobs:
           versioning: None
           buildMethod: UnityBuilderAction.Builder.Build
           buildsPath: ${{ github.event.inputs.targetPlatform }}/build
-          customParameters: "-appBundleId ${{ github.event.inputs.appBundleId }}"
+          customParameters: "-appBundleId ${{ github.event.inputs.appBundleId }} -customGradlePath ../..gradle"
           # Android settings
           androidAppBundle: true
           androidKeystoreName: superlevel.keystore

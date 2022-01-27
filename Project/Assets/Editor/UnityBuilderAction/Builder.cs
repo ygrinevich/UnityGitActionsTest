@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityBuilderAction.Input;
@@ -41,6 +42,18 @@ namespace UnityBuilderAction
             };
 
             PlayerSettings.applicationIdentifier = options["appBundleId"];
+
+            if (options.ContainsKey("customGradlePath"))
+            {
+                var defaultGradlePath = EditorPrefs.GetString("GradlePath", "");
+
+                var customGradlePath = Path.Combine(Application.dataPath, options["customGradlePath"]);
+
+                EditorPrefs.SetBool("GradleUseEmbedded", false);
+                EditorPrefs.SetString("GradlePath", customGradlePath);
+
+                Debug.Log($"ChangeGradlePath: {defaultGradlePath} to {customGradlePath}");
+            }
 
             // Set version for this build
             VersionApplicator.SetVersion(options["buildVersion"]);
