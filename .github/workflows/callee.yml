@@ -9,6 +9,13 @@ on:
       releaseToFirebase:
         required: true
         type: boolean
+    outputs:
+      output1:
+        description: "The build artifact name"
+        value: ${{ inputs.releaseToPlayStore }}
+      output2:
+        description: "The app bundle id"
+        value: ${{ inputs.releaseToFirebase }}
 
 jobs:
 
