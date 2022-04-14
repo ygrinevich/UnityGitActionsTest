@@ -11,11 +11,11 @@ on:
         required: true
         type: boolean
         description: Release to Firebase
-        default: 'true'
+        default: true
 
 jobs:
   release_to_playstore:
     uses: ygrinevich/UnityGitActionsTest/.github/workflows/callee.yml@main
     with:
-      releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore == 'true' }}
-      releaseToFirebase: ${{ github.event.inputs.releaseToFirebase == 'true' }}
+      releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore }}
+      releaseToFirebase: ${{ github.event.inputs.releaseToFirebase }}
