@@ -19,3 +19,5 @@ jobs:
     with:
       releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore == 'true' }}
       releaseToFirebase: ${{ github.event.inputs.releaseToFirebase == 'true' }}
+    secrets:
+      apple_connect_email: ${{ secrets.APPLE_CONNECT_EMAIL }}
