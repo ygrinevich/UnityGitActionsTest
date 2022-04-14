@@ -12,13 +12,6 @@ on:
     secrets:
       apple_connect_email:
         required: false
-    outputs:
-      output1:
-        description: "The build artifact name"
-        value: ${{ inputs.releaseToPlayStore }}
-      output2:
-        description: "The app bundle id"
-        value: ${{ inputs.releaseToFirebase }}
 
 jobs:
 
