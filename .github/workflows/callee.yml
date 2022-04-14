@@ -35,5 +35,7 @@ jobs:
         run: echo ${{ inputs.releaseToFirebase }}
 
       - name: Check Secret Exists
-        if: ${{ secrets.apple_connect_email != '' }}
-        run: echo ${{ secrets.apple_connect_email }}
+        env:
+         APPLE_CONNECT_EMAIL: ${{ secrets.apple_connect_email }}
+        if: ${{ env.APPLE_CONNECT_EMAIL != '' }}
+        run: echo ${{ env.APPLE_CONNECT_EMAIL }}
