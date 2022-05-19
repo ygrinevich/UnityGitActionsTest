@@ -23,6 +23,12 @@ jobs:
     name: Release to the Play Store / Firebase
     runs-on: ubuntu-latest
     steps:
+      - name: Get Current Time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+         format: SSSSSS
+
       - name: Add Google Play Authentication
         if: ${{ inputs.releaseToPlayStore }}
         run: echo ${{ inputs.releaseToPlayStore }}
@@ -40,3 +46,9 @@ jobs:
       - name: Check Is Development Build
         if: ${{ inputs.isDevelopmentBuild }}
         run: echo ${{ inputs.isDevelopmentBuild }}
+
+      - name: Current Time
+        env:
+         TIME: "${{ steps.current-time.outputs.time }}"
+         F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
+        run: echo $TIME $F_TIME
