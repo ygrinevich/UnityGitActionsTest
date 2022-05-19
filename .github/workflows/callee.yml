@@ -9,6 +9,10 @@ on:
       releaseToFirebase:
         required: true
         type: boolean
+      isDevelopmentBuild:
+        required: false
+        type: boolean
+        default: true
     secrets:
       apple_connect_email:
         required: false
@@ -32,3 +36,7 @@ jobs:
          APPLE_CONNECT_EMAIL: ${{ secrets.apple_connect_email }}
         if: ${{ env.APPLE_CONNECT_EMAIL != '' }}
         run: echo ${{ env.APPLE_CONNECT_EMAIL }}
+
+      - name: Check Is Development Build
+        if: ${{ inputs.isDevelopmentBuild }}
+        run: echo ${{ inputs.isDevelopmentBuild }}

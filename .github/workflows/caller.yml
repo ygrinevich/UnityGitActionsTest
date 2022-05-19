@@ -12,6 +12,11 @@ on:
         type: boolean
         description: Release to Firebase
         default: true
+      isDevelopmentBuild:
+        required: true
+        type: boolean
+        description: Is Development Build
+        default: true
 
 jobs:
   release_to_playstore:
