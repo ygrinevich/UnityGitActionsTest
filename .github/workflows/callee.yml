@@ -48,7 +48,4 @@ jobs:
         run: echo ${{ inputs.isDevelopmentBuild }}
 
       - name: Current Time
-        env:
-         TIME: "${{ steps.current-time.outputs.time }}"
-         F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
-        run: echo $TIME $F_TIME
+        run: echo ${{ steps.current-time.outputs.formattedTime }}
