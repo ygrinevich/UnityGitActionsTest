@@ -17,6 +17,10 @@ on:
       apple_connect_email:
         required: false
 
+env:
+  BRANCH: ${{ github.event.workflow_run.head_branch != '' && github.event.workflow_run.head_branch || github.ref }}
+  SHA: ${{ github.event.workflow_run.head_sha != '' && github.event.workflow_run.head_sha || github.sha }}
+
 jobs:
 
   release_to_playsrore:
@@ -27,7 +31,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: ${{ env.BRANCH }}
 
       - name: Get Current Time
         uses: josStorer/get-current-time@v2
@@ -56,11 +60,11 @@ jobs:
       - name: Current Time
         run: echo ${{ steps.current-time.outputs.formattedTime }}
 
-      - name: Ref Name
-        run: echo ${{ github.ref_name }}
+      - name: Branch Name
+        run: echo ${{ env.BRANCH }}
 
       - name: Run Url
         run: echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
 
       - name: Run Commit Url
-        run: echo "https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+        run: echo "https://github.com/${{ github.repository }}/commit/${{ env.SHA }}"
