@@ -18,7 +18,8 @@ on:
         required: false
 
 env:
-  BRANCH: ${{ github.event.workflow_run.head_branch != '' && github.event.workflow_run.head_branch || github.ref }}
+  REF: ${{ github.event.workflow_run.head_branch != '' && github.event.workflow_run.head_branch || github.ref }}
+  REF_NAME: ${{ github.event.workflow_run.head_branch != '' && github.event.workflow_run.head_branch || github.ref_name }}
   SHA: ${{ github.event.workflow_run.head_sha != '' && github.event.workflow_run.head_sha || github.sha }}
 
 jobs:
@@ -60,8 +61,11 @@ jobs:
       - name: Current Time
         run: echo ${{ steps.current-time.outputs.formattedTime }}
 
-      - name: Branch Name
-        run: echo ${{ env.BRANCH }}
+      - name: Ref
+        run: echo ${{ env.REF }}
+
+      - name: Ref Name
+        run: echo ${{ env.REF_NAME }}
 
       - name: Run Url
         run: echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
