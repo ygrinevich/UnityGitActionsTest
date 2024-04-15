@@ -13,6 +13,9 @@ on:
         required: false
         type: boolean
         default: true
+      branch:
+        required: false
+        type: string
     secrets:
       apple_connect_email:
         required: false
@@ -23,6 +26,22 @@ jobs:
     name: Release to the Play Store / Firebase
     runs-on: ubuntu-latest
     steps:
+
+      - name: Checkout Code 1
+        if: ${{ inputs.branch != '' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+
+      - name: Checkout Code 2
+        if: ${{ github.event.workflow_call.head_branch != '' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_call.head_branch }}
+     
+      - name: Checkout Code 3
+        uses: actions/checkout@v4
+
       - name: Get Current Time
         uses: josStorer/get-current-time@v2
         id: current-time

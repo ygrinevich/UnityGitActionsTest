@@ -1,0 +1,20 @@
+name: Callee On Caller Completed
+
+on:
+  workflow_run:
+    workflows: ["Caller"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  release_to_playstore:
+    uses: ygrinevich/UnityGitActionsTest/.github/workflows/callee.yml@main
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    with:
+      releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore == 'true' }}
+      releaseToFirebase: ${{ github.event.inputs.releaseToFirebase == 'true' }}
+      isDevelopmentBuild: ${{ github.event.inputs.isDevelopmentBuild == 'true' }}
+      branch: ${{ github.event.workflow_run.head_branch }}
+    secrets:
+      apple_connect_email: ${{ secrets.APPLE_CONNECT_EMAIL }}
