@@ -14,6 +14,5 @@ jobs:
       releaseToPlayStore: ${{ github.event.inputs.releaseToPlayStore == 'true' }}
       releaseToFirebase: ${{ github.event.inputs.releaseToFirebase == 'true' }}
       isDevelopmentBuild: ${{ github.event.inputs.isDevelopmentBuild == 'true' }}
-      branch: ${{ github.event.workflow_run.head_branch }}
     secrets:
       apple_connect_email: ${{ secrets.APPLE_CONNECT_EMAIL }}

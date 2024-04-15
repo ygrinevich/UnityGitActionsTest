@@ -13,9 +13,6 @@ on:
         required: false
         type: boolean
         default: true
-      branch:
-        required: false
-        type: string
     secrets:
       apple_connect_email:
         required: false
@@ -27,19 +24,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout Code 1
-        if: ${{ inputs.branch != '' }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.branch }}
-
-      - name: Checkout Code 2
+      - name: Checkout Code On workflow_run
         if: ${{ github.event.workflow_run.head_branch != '' }}
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
      
-      - name: Checkout Code 3
+      - name: Checkout Code On workflow_dispatch
+        if: ${{ github.event.workflow_dispatch.ref != '' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_dispatch.ref }}
+
+      - name: Checkout Code On workflow_run
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Get Current Time
