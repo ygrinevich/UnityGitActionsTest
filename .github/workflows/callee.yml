@@ -55,3 +55,12 @@ jobs:
 
       - name: Current Time
         run: echo ${{ steps.current-time.outputs.formattedTime }}
+
+      - name: Ref Name
+        run: echo ${{ github.ref_name }}
+
+      - name: Run Url
+        run: echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
+
+      - name: Run Commit Url
+        run: echo "https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
