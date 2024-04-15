@@ -24,25 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout Code On workflow_run
-        if: ${{ github.event.workflow_run.head_branch != '' }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-     
-      - name: Checkout Code On workflow_dispatch
-        if: ${{ github.event.workflow_dispatch.ref != '' }}
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_dispatch.ref }}
-
-      - name: Checkout Code On workflow_run
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
 
       - name: Get Current Time
         uses: josStorer/get-current-time@v2
