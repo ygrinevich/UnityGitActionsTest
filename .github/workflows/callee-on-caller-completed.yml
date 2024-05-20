@@ -5,7 +5,7 @@ on:
     workflows: ["Caller"]
     types:
       - completed
-  workflow_dispatch:
+    branches: [ 'release/1*' ]
 
 jobs:
   release_to_playstore:
