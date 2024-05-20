@@ -7,6 +7,8 @@ on:
       - completed
     branches: [ 'release/1*' ]
 
+  workflow_dispatch:
+
 jobs:
   release_to_playstore:
     uses: ygrinevich/UnityGitActionsTest/.github/workflows/callee.yml@main
